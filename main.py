@@ -68,3 +68,20 @@ class Queen(Pieces):
             if y != self.y:
                 poss.append([self.x,y])
         return poss
+
+def board():
+    print('-'*27)
+    for y in range(7,-1,-1):
+        print(f'{y+1} ',end = ' ')
+        for x in range(0,8):
+            if (x+y) % 2 == 0:
+                print(f'\033[40m   \033[m',end='')
+            else:
+                print(f'\033[47m   \033[m',end='')
+        print('')
+    print('    a  b  c  d  e  f  g  h')
+    print('-'*27)
+
+while True:
+    board()
+    break
