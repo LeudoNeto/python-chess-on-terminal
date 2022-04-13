@@ -94,8 +94,6 @@ def board():
     print('    a  b  c  d  e  f  g  h')
     print('-'*27)
 
-print('♚')
-
 while True:
     board()
     break
