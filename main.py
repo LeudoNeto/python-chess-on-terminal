@@ -13,6 +13,8 @@ class Pieces:
         Pieces.alives.append(self)
 
 class Pawn(Pieces):
+    white_emoji = '♙'
+    black_emoji = '♟'
     def move_possibilites(self):
         if self.color == 'white':
             return [[self.x,self.y+1],[self.x,self.y+2]]
@@ -20,6 +22,8 @@ class Pawn(Pieces):
             return [[self.x,self.y-1],[self.x,self.y-2]]
 
 class Rook(Pieces):
+    white_emoji = '♖'
+    black_emoji = '♜'
     def move_possibilites(self):
         poss = []
         for x in range(0,8):
@@ -31,10 +35,14 @@ class Rook(Pieces):
         return poss
 
 class Horse(Pieces):
+    white_emoji = '♘'
+    black_emoji = '♞'
     def move_possibilites(self):
         return [[self.x+1,self.y+2],[self.x+2,self.y+1],[self.x+2,self.y-1],[self.x+1,self.y-2],[self.x-1,self.y-2],[self.x-2,self.y-1],[self.x-2,self.y+1],[self.x-1,self.y+2]]
 
 class Bishop(Pieces):
+    white_emoji = '♗'
+    black_emoji = '♝'
     def move_possibilites(self):
         poss = []
         for x in range(0,8):
@@ -45,6 +53,8 @@ class Bishop(Pieces):
         return poss
 
 class King(Pieces):
+    white_emoji = '♔'
+    black_emoji = '♚'
     def move_possibilites(self):
         poss = []
         for x in range(0,8):
@@ -55,6 +65,8 @@ class King(Pieces):
         return poss
 
 class Queen(Pieces):
+    white_emoji = '♕'
+    black_emoji = '♛'
     def move_possibilites(self):
         poss = []
         for x in range(0,8):
@@ -81,6 +93,8 @@ def board():
         print('')
     print('    a  b  c  d  e  f  g  h')
     print('-'*27)
+
+print('♚')
 
 while True:
     board()
