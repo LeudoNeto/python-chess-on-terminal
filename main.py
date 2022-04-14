@@ -13,8 +13,7 @@ class Pieces:
         Pieces.alives.append(self)
 
 class Pawn(Pieces):
-    white_emoji = '♙'
-    black_emoji = '♟'
+    emoji = '♟'
     def move_possibilites(self):
         if self.color == 'white':
             return [[self.x,self.y+1],[self.x,self.y+2]]
@@ -22,8 +21,7 @@ class Pawn(Pieces):
             return [[self.x,self.y-1],[self.x,self.y-2]]
 
 class Rook(Pieces):
-    white_emoji = '♖'
-    black_emoji = '♜'
+    emoji = '♜'
     def move_possibilites(self):
         poss = []
         for x in range(0,8):
@@ -35,14 +33,12 @@ class Rook(Pieces):
         return poss
 
 class Horse(Pieces):
-    white_emoji = '♘'
-    black_emoji = '♞'
+    emoji = '♞'
     def move_possibilites(self):
         return [[self.x+1,self.y+2],[self.x+2,self.y+1],[self.x+2,self.y-1],[self.x+1,self.y-2],[self.x-1,self.y-2],[self.x-2,self.y-1],[self.x-2,self.y+1],[self.x-1,self.y+2]]
 
 class Bishop(Pieces):
-    white_emoji = '♗'
-    black_emoji = '♝'
+    emoji = '♝'
     def move_possibilites(self):
         poss = []
         for x in range(0,8):
@@ -53,8 +49,7 @@ class Bishop(Pieces):
         return poss
 
 class King(Pieces):
-    white_emoji = '♔'
-    black_emoji = '♚'
+    emoji = '♚'
     def move_possibilites(self):
         poss = []
         for x in range(0,8):
@@ -65,8 +60,7 @@ class King(Pieces):
         return poss
 
 class Queen(Pieces):
-    white_emoji = '♕'
-    black_emoji = '♛'
+    emoji = '♛'
     def move_possibilites(self):
         poss = []
         for x in range(0,8):
@@ -81,20 +75,62 @@ class Queen(Pieces):
                 poss.append([self.x,y])
         return poss
 
-def board():
-    print('-'*27)
-    for y in range(7,-1,-1):
-        print(f'{y+1} ',end = ' ')
-        for x in range(0,8):
-            if (x+y) % 2 == 0:
-                print(f'\033[40m   \033[m',end='')
-            else:
-                print(f'\033[47m   \033[m',end='')
-        print('')
-    print('    a  b  c  d  e  f  g  h')
-    print('-'*27)
+def board(moving=False):
+    if not moving:
+        print('-'*27)
+        for y in range(7,-1,-1):
+            print(f'{y+1} ',end = ' ')
+            for x in range(0,8):
+                if (x+y) % 2 == 0:
+                    if [x,y] not in pieces_coords:
+                        print(f'\033[40m    \033[m',end='')
+                    elif [x,y] in whites_coords:
+                        print(f'\033[37;40m{Pieces.whites[whites_coords.index([x,y])].emoji:^3} \033[m',end = '')
+                    elif [x,y] in blacks_coords:
+                        print(f'\033[30;40m{Pieces.blacks[blacks_coords.index([x,y])].emoji:^3} \033[m',end = '')
+                else:
+                    if [x,y] not in pieces_coords:
+                        print(f'\033[47m    \033[m',end='')
+                    elif [x,y] in whites_coords:
+                        print(f'\033[37;47m{Pieces.whites[whites_coords.index([x,y])].emoji:^3} \033[m',end = '')
+                    elif [x,y] in blacks_coords:
+                        print(f'\033[30;47m{Pieces.blacks[blacks_coords.index([x,y])].emoji:^3} \033[m',end = '')
+            print('')
+        print('    a  b  c  d  e  f  g  h')
+        print('-'*27)
 
-p1 = Pawn(0,0,'white')
+wp1 = Pawn(0,1,'white')
+wp2 = Pawn(1,1,'white')
+wp3 = Pawn(2,1,'white')
+wp4 = Pawn(3,1,'white')
+wp5 = Pawn(4,1,'white')
+wp6 = Pawn(5,1,'white')
+wp7 = Pawn(6,1,'white')
+wp8 = Pawn(7,1,'white')
+bp1 = Pawn(0,6,'black')
+bp2 = Pawn(1,6,'black')
+bp3 = Pawn(2,6,'black')
+bp4 = Pawn(3,6,'black')
+bp5 = Pawn(4,6,'black')
+bp6 = Pawn(5,6,'black')
+bp7 = Pawn(6,6,'black')
+bp8 = Pawn(7,6,'black')
+wr1 = Rook(0,0,'white')
+wr2 = Rook(7,0,'white')
+br1 = Rook(0,7,'black')
+br2 = Rook(7,7,'black')
+wh1 = Horse(1,0,'white')
+wh2 = Horse(6,0,'white')
+bh1 = Horse(1,7,'black')
+bh2 = Horse(6,7,'black')
+wb1 = Bishop(2,0,'white')
+wb2 = Bishop(5,0,'white')
+bb1 = Bishop(2,7,'black')
+bb2 = Bishop(5,7,'black')
+wq = Queen(3,0,'white')
+bq = Queen(4,7,'black')
+wk = King(4,0,'white')
+bk = King(3,7,'black')
 
 while True:
     pieces_coords = []
@@ -109,4 +145,4 @@ while True:
     board()
     break
 
-print(pieces_coords.index([0,0]))
+
