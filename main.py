@@ -94,6 +94,19 @@ def board():
     print('    a  b  c  d  e  f  g  h')
     print('-'*27)
 
+p1 = Pawn(0,0,'white')
+
 while True:
+    pieces_coords = []
+    whites_coords = []
+    blacks_coords = []
+    for piece in Pieces.alives:
+        pieces_coords.append([piece.x,piece.y])
+    for white in Pieces.whites:
+        whites_coords.append([white.x,white.y])
+    for black in Pieces.blacks:
+        blacks_coords.append([black.x,black.y])
     board()
     break
+
+print(pieces_coords.index([0,0]))
