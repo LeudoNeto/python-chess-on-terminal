@@ -77,7 +77,7 @@ class Queen(Pieces):
 
 def board(moving=False):
     if not moving:
-        print('-'*27)
+        print('-'*35)
         for y in range(7,-1,-1):
             print(f'{y+1} ',end = ' ')
             for x in range(0,8):
@@ -96,8 +96,15 @@ def board(moving=False):
                     elif [x,y] in blacks_coords:
                         print(f'\033[30;47m{Pieces.blacks[blacks_coords.index([x,y])].emoji:^3} \033[m',end = '')
             print('')
-        print('    a  b  c  d  e  f  g  h')
-        print('-'*27)
+        print('    a   b   c   d   e   f   g   h')
+        print('-'*35)
+
+def event(a,b=0):
+    print('-='*25)
+    print(f'{a.color.capitalize()} {type(a).__name__} moved to b1')
+    if b != 0:
+        print(f'{a.color.capitalize()} {type(a).__name__} ate {b.color.capitalize()} {type(b).__name__}')
+    print('-='*25)
 
 wp1 = Pawn(0,1,'white')
 wp2 = Pawn(1,1,'white')
@@ -145,4 +152,4 @@ while True:
     board()
     break
 
-
+event(wp1,bp1)
