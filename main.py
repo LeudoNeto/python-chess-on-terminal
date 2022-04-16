@@ -99,12 +99,17 @@ def board(moving=False):
         print('    a   b   c   d   e   f   g   h')
         print('-'*35)
 
-def event(a,b=0):
-    print('-='*25)
-    print(f'{a.color.capitalize()} {type(a).__name__} moved to b1')
+def event(txt):
+    print('-='*(int(len(txt)/2)+2))
+    print(txt.center(len(txt)+4))
+    print('-='*(int(len(txt)/2)+2))
+
+def move_event(a,b=0):
+    print('-='*15)
+    print(f'{a.color.capitalize()} {type(a).__name__} moved to b1'.center(30))
     if b != 0:
-        print(f'{a.color.capitalize()} {type(a).__name__} ate {b.color.capitalize()} {type(b).__name__}')
-    print('-='*25)
+        print(f'{a.color.capitalize()} {type(a).__name__} ate {b.color.capitalize()} {type(b).__name__}'.center(30))
+    print('-='*15)
 
 wp1 = Pawn(0,1,'white')
 wp2 = Pawn(1,1,'white')
@@ -152,4 +157,3 @@ while True:
     board()
     break
 
-event(wp1,bp1)
