@@ -69,11 +69,13 @@ class Horse(Pieces):
     emoji = '♞'
     def move_possibilites(self):
         poss = []
+        startx,starty = self.x,self.y
         for c in [[self.x+1,self.y+2],[self.x+2,self.y+1],[self.x+2,self.y-1],[self.x+1,self.y-2],[self.x-1,self.y-2],[self.x-2,self.y-1],[self.x-2,self.y+1],[self.x-1,self.y+2]]:
             self.x = c[0]
             self.y = c[1]
             if -1 < self.x < 8 and -1 < self.y < 8:
                 poss.append(c)
+        self.x,self.y = startx,starty
         return poss
 
 class Bishop(Pieces):
