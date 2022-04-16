@@ -15,10 +15,22 @@ class Pieces:
 class Pawn(Pieces):
     emoji = '♟'
     def move_possibilites(self):
+        poss = []
+        startx,starty = self.x,self.y
         if self.color == 'white':
-            return [[self.x,self.y+1],[self.x,self.y+2]]
+            for c in range(0,2):
+                self.y += 1
+                poss.append([self.x,self.y])
+                if [self.x,self.y+1] in pieces_coords:
+                    break
         elif self.color == 'black':
-            return [[self.x,self.y-1],[self.x,self.y-2]]
+            for c in range(0,2):
+                self.y -= 1
+                poss.append([self.x,self.y])
+                if [self.x,self.y+1] in pieces_coords:
+                    break
+        self.x,self.y = startx,starty
+        return poss
 
 class Rook(Pieces):
     emoji = '♜'
@@ -76,6 +88,7 @@ class Queen(Pieces):
         return poss
 
 def board(piece=0):
+    print(piece.move_possibilites())
     print('-'*35)
     for y in range(7,-1,-1):
         print(f'{y+1} ',end = ' ')
@@ -122,7 +135,7 @@ def move_event(a,b=0):
         print(f'{a.color.capitalize()} {type(a).__name__} ate {b.color.capitalize()} {type(b).__name__}'.center(30))
     print('-='*15)
 
-wp1 = Pawn(0,1,'white')
+wp1 = Pawn(0,5,'white')
 wp2 = Pawn(1,1,'white')
 wp3 = Pawn(2,1,'white')
 wp4 = Pawn(3,1,'white')
@@ -150,7 +163,7 @@ wb1 = Bishop(2,0,'white')
 wb2 = Bishop(5,0,'white')
 bb1 = Bishop(2,7,'black')
 bb2 = Bishop(5,7,'black')
-wq = Queen(3,5,'white')
+wq = Queen(3,0,'white')
 bq = Queen(4,7,'black')
 wk = King(4,0,'white')
 bk = King(3,7,'black')
@@ -165,6 +178,6 @@ while True:
         whites_coords.append([white.x,white.y])
     for black in Pieces.blacks:
         blacks_coords.append([black.x,black.y])
-    board(wq)
+    board(wp1)
     break
 
