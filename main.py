@@ -20,13 +20,15 @@ class Pawn(Pieces):
         if self.color == 'white':
             for c in range(0,2):
                 self.y += 1
-                poss.append([self.x,self.y])
+                if self.y < 8:
+                    poss.append([self.x,self.y])
                 if [self.x,self.y] in pieces_coords:
                     break
         elif self.color == 'black':
             for c in range(0,2):
                 self.y -= 1
-                poss.append([self.x,self.y])
+                if self.y > -1:
+                    poss.append([self.x,self.y])
                 if [self.x,self.y] in pieces_coords:
                     break
         self.x,self.y = startx,starty
@@ -37,25 +39,25 @@ class Rook(Pieces):
     def move_possibilites(self):
         poss = []
         startx,starty = self.x,self.y
-        while self.y < 8:
+        while self.y < 7:
             self.y += 1
             poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.y = starty
-        while self.y > -1:
+        while self.y > 0:
             self.y -= 1
             poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.y = starty
-        while self.x < 8:
+        while self.x < 7:
             self.x += 1
             poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.x = startx
-        while self.x > -1:
+        while self.x > 0:
             self.x -= 1
             poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
@@ -66,35 +68,41 @@ class Rook(Pieces):
 class Horse(Pieces):
     emoji = '♞'
     def move_possibilites(self):
-        return [[self.x+1,self.y+2],[self.x+2,self.y+1],[self.x+2,self.y-1],[self.x+1,self.y-2],[self.x-1,self.y-2],[self.x-2,self.y-1],[self.x-2,self.y+1],[self.x-1,self.y+2]]
+        poss = []
+        for c in [[self.x+1,self.y+2],[self.x+2,self.y+1],[self.x+2,self.y-1],[self.x+1,self.y-2],[self.x-1,self.y-2],[self.x-2,self.y-1],[self.x-2,self.y+1],[self.x-1,self.y+2]]:
+            self.x = c[0]
+            self.y = c[1]
+            if -1 < self.x < 8 and -1 < self.y < 8:
+                poss.append(c)
+        return poss
 
 class Bishop(Pieces):
     emoji = '♝'
     def move_possibilites(self):
         poss = []
         startx,starty = self.x,self.y
-        for c in range(0,8):
+        while self.y < 7 and self.x < 7:
             self.x += 1
             self.y += 1
             poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.x,self.y = startx,starty
-        for c in range(0,8):
+        while self.y < 7 and self.x > 0:
             self.x -= 1
             self.y += 1
             poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.x,self.y = startx,starty
-        for c in range(0,8):
+        while self.x < 7 and self.y > 0:
             self.x += 1
             self.y -= 1
             poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.x,self.y = startx,starty
-        for c in range(0,8):
+        while self.x > 0 and self.y > 0:
             self.x -= 1
             self.y -= 1
             poss.append([self.x,self.y])
@@ -119,52 +127,52 @@ class Queen(Pieces):
     def move_possibilites(self):
         poss = []
         startx,starty = self.x,self.y
-        while self.y < 8:
+        while self.y < 7:
             self.y += 1
             poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.y = starty
-        while self.y > -1:
+        while self.y > 0:
             self.y -= 1
             poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.y = starty
-        while self.x < 8:
+        while self.x < 7:
             self.x += 1
             poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.x = startx
-        while self.x > -1:
+        while self.x > 0:
             self.x -= 1
             poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.x = startx
-        for c in range(0,8):
+        while self.y < 7 and self.x < 7:
             self.x += 1
             self.y += 1
             poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.x,self.y = startx,starty
-        for c in range(0,8):
+        while self.y < 7 and self.x > 0:
             self.x -= 1
             self.y += 1
             poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.x,self.y = startx,starty
-        for c in range(0,8):
+        while self.y > 0 and self.x < 7:
             self.x += 1
             self.y -= 1
             poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.x,self.y = startx,starty
-        for c in range(0,8):
+        while self.y > 0 and self.x > 7:
             self.x -= 1
             self.y -= 1
             poss.append([self.x,self.y])
@@ -213,9 +221,9 @@ def event(txt):
     print(txt.center(len(txt)+4))
     print('-='*(int(len(txt)/2)+2))
 
-def move_event(a,b=0):
+def move_event(a,pos,b=0):
     print('-='*15)
-    print(f'{a.color.capitalize()} {type(a).__name__} moved to b1'.center(30))
+    print(f'{a.color.capitalize()} {type(a).__name__} moved to {letters[pos[0]]}{pos[1]}'.center(30))
     if b != 0:
         print(f'{a.color.capitalize()} {type(a).__name__} ate {b.color.capitalize()} {type(b).__name__}'.center(30))
     print('-='*15)
@@ -271,7 +279,7 @@ while True:
     print('OBS: You can write the number on left, or the respective board position')
     i = 0
     for c,piece in enumerate(Pieces.whites):
-        print(f'{f"[{c}] {type(piece).__name__}":<11} ({letters[piece.x]}{piece.y+1})      ',end='')
+        print(f'{f"[{c+1}] {type(piece).__name__}":<11} ({letters[piece.x]}{piece.y+1})      ',end='')
         i += 1
         if i == 4:
             print('')
@@ -281,8 +289,8 @@ while True:
     while True:
         try:
             int(choice)
-            if int(choice) in range(0,len(Pieces.whites)):
-                choice = Pieces.whites[int(choice)]
+            if int(choice) in range(1,len(Pieces.whites)+1):
+                choice = Pieces.whites[int(choice)-1]
                 break
             else:
                 choice = input('Invalid choice, please try again: ')
@@ -296,4 +304,32 @@ while True:
             else:
                 choice = input('Invalid choice, please try again: ')
     event(f'You choose {choice.color.capitalize()} {type(choice).__name__} ({letters[choice.x]}{choice.y+1})')
-    break
+    board(choice)
+    event(f'Where do you want to move {choice.color.capitalize()} {type(choice).__name__}?')
+    print('OBS: You can write the number on left, or the respective board position')
+    for c,pos in enumerate(choice.move_possibilites()):
+        print(f'[{c+1}] {letters[pos[0]]}{pos[1]+1}      ',end='')
+        i += 1
+        if i == 4:
+            print('')
+            i = 0
+    poschoice = input('Your choice: ')
+    while True:
+        try:
+            int(poschoice)
+            if int(poschoice) in range(1,len(choice.move_possibilites())+1):
+                poschoice = choice.move_possibilites()[int(poschoice)-1]
+                break
+            else:
+                poschoice = input('Invalid choice, please try again: ')
+        except ValueError:
+            if len(poschoice) == 2 and poschoice[0].isalpha() and poschoice[1].isnumeric():
+                if [letters.index(poschoice[0]),int(poschoice[1])-1] in choice.move_possibiltes():
+                    poschoice = [letters.index(poschoice[0]),poschoice[1]]
+                    break
+                else:
+                    poschoice = input('Invalid choice, please try again: ')
+            else:
+                poschoice = input('Invalid choice, please try again: ')
+    move_event(choice,poschoice)
+    
