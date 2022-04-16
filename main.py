@@ -223,7 +223,7 @@ def event(txt):
 
 def move_event(a,pos,b=0):
     print('-='*15)
-    print(f'{a.color.capitalize()} {type(a).__name__} moved to {letters[pos[0]]}{pos[1]}'.center(30))
+    print(f'{a.color.capitalize()} {type(a).__name__} moved to {letters[pos[0]]}{pos[1]+1}'.center(30))
     if b != 0:
         print(f'{a.color.capitalize()} {type(a).__name__} ate {b.color.capitalize()} {type(b).__name__}'.center(30))
     print('-='*15)
@@ -308,11 +308,12 @@ while True:
     event(f'Where do you want to move {choice.color.capitalize()} {type(choice).__name__}?')
     print('OBS: You can write the number on left, or the respective board position')
     for c,pos in enumerate(choice.move_possibilites()):
-        print(f'[{c+1}] {letters[pos[0]]}{pos[1]+1}      ',end='')
+        print(f'{f"[{c+1}] {letters[pos[0]]}{pos[1]+1}":<14}',end='')
         i += 1
         if i == 4:
             print('')
             i = 0
+    print('')
     poschoice = input('Your choice: ')
     while True:
         try:
@@ -324,12 +325,18 @@ while True:
                 poschoice = input('Invalid choice, please try again: ')
         except ValueError:
             if len(poschoice) == 2 and poschoice[0].isalpha() and poschoice[1].isnumeric():
-                if [letters.index(poschoice[0]),int(poschoice[1])-1] in choice.move_possibiltes():
-                    poschoice = [letters.index(poschoice[0]),poschoice[1]]
+                if [letters.index(poschoice[0]),int(poschoice[1])-1] in choice.move_possibilites():
+                    poschoice = [letters.index(poschoice[0]),int(poschoice[1])-1]
                     break
                 else:
                     poschoice = input('Invalid choice, please try again: ')
             else:
                 poschoice = input('Invalid choice, please try again: ')
-    move_event(choice,poschoice)
-    
+    if poschoice in blacks_coords:
+        move_event(choice,poschoice,Pieces.blacks[blacks_coords.index(poschoice)])
+        Pieces.blacks.pop(blacks_coords.index(poschoice))
+        Pieces.alives.pop(pieces_coords.index(poschoice))
+        [choice.x,choice.y] = poschoice
+    else:
+        move_event(choice,poschoice)
+        [choice.x,choice.y] = poschoice
