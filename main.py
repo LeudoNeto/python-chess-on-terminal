@@ -75,29 +75,40 @@ class Queen(Pieces):
                 poss.append([self.x,y])
         return poss
 
-def board(moving=False):
-    if not moving:
-        print('-'*35)
-        for y in range(7,-1,-1):
-            print(f'{y+1} ',end = ' ')
-            for x in range(0,8):
-                if (x+y) % 2 == 0:
-                    if [x,y] not in pieces_coords:
-                        print(f'\033[40m    \033[m',end='')
-                    elif [x,y] in whites_coords:
-                        print(f'\033[37;40m{Pieces.whites[whites_coords.index([x,y])].emoji:^3} \033[m',end = '')
-                    elif [x,y] in blacks_coords:
-                        print(f'\033[30;40m{Pieces.blacks[blacks_coords.index([x,y])].emoji:^3} \033[m',end = '')
-                else:
-                    if [x,y] not in pieces_coords:
-                        print(f'\033[47m    \033[m',end='')
-                    elif [x,y] in whites_coords:
-                        print(f'\033[37;47m{Pieces.whites[whites_coords.index([x,y])].emoji:^3} \033[m',end = '')
-                    elif [x,y] in blacks_coords:
-                        print(f'\033[30;47m{Pieces.blacks[blacks_coords.index([x,y])].emoji:^3} \033[m',end = '')
-            print('')
-        print('    a   b   c   d   e   f   g   h')
-        print('-'*35)
+def board(piece=0):
+    print('-'*35)
+    for y in range(7,-1,-1):
+        print(f'{y+1} ',end = ' ')
+        for x in range(0,8):
+            if (x+y) % 2 == 0:
+                if piece != 0 and [x,y] in whites_coords and piece.color == 'black' and [x,y] in piece.move_possibilites():
+                    print(f'\033[37;41m{Pieces.whites[whites_coords.index([x,y])].emoji:^3} \033[m',end = '')
+                elif piece != 0 and ([x,y] in blacks_coords and piece.color == 'white') and [x,y] in piece.move_possibilites():
+                    print(f'\033[37;41m{Pieces.blacks[blacks_coords.index([x,y])].emoji:^3} \033[m',end = '')
+                elif [x,y] in whites_coords:
+                    print(f'\033[37;40m{Pieces.whites[whites_coords.index([x,y])].emoji:^3} \033[m',end = '')
+                elif [x,y] in blacks_coords:
+                    print(f'\033[30;40m{Pieces.blacks[blacks_coords.index([x,y])].emoji:^3} \033[m',end = '')
+                elif piece != 0 and [x,y] in piece.move_possibilites():
+                    print(f'\033[42m    \033[m',end='')
+                elif [x,y] not in pieces_coords:
+                    print(f'\033[40m    \033[m',end='')
+            else:
+                if piece != 0 and [x,y] in whites_coords and piece.color == 'black' and [x,y] in piece.move_possibilites():
+                    print(f'\033[37;41m{Pieces.whites[whites_coords.index([x,y])].emoji:^3} \033[m',end = '')
+                elif piece != 0 and ([x,y] in blacks_coords and piece.color == 'white') and [x,y] in piece.move_possibilites():
+                    print(f'\033[37;41m{Pieces.blacks[blacks_coords.index([x,y])].emoji:^3} \033[m',end = '')
+                elif [x,y] in whites_coords:
+                    print(f'\033[37;47m{Pieces.whites[whites_coords.index([x,y])].emoji:^3} \033[m',end = '')
+                elif [x,y] in blacks_coords:
+                    print(f'\033[30;47m{Pieces.blacks[blacks_coords.index([x,y])].emoji:^3} \033[m',end = '')
+                elif piece != 0 and [x,y] in piece.move_possibilites():
+                    print(f'\033[42m    \033[m',end='')
+                elif [x,y] not in pieces_coords:
+                    print(f'\033[47m    \033[m',end='')
+        print('')
+    print('    a   b   c   d   e   f   g   h')
+    print('-'*35)
 
 def event(txt):
     print('-='*(int(len(txt)/2)+2))
@@ -139,7 +150,7 @@ wb1 = Bishop(2,0,'white')
 wb2 = Bishop(5,0,'white')
 bb1 = Bishop(2,7,'black')
 bb2 = Bishop(5,7,'black')
-wq = Queen(3,0,'white')
+wq = Queen(3,5,'white')
 bq = Queen(4,7,'black')
 wk = King(4,0,'white')
 bk = King(3,7,'black')
@@ -154,6 +165,6 @@ while True:
         whites_coords.append([white.x,white.y])
     for black in Pieces.blacks:
         blacks_coords.append([black.x,black.y])
-    board()
+    board(wq)
     break
 
