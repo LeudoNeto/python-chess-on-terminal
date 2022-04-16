@@ -248,12 +248,15 @@ wb1 = Bishop(2,0,'white')
 wb2 = Bishop(5,0,'white')
 bb1 = Bishop(2,7,'black')
 bb2 = Bishop(5,7,'black')
-wq = Queen(3,0,'white')
+wq = Queen(3,4,'white')
 bq = Queen(4,7,'black')
 wk = King(4,0,'white')
 bk = King(3,7,'black')
 
+letters = ['a','b','c','d','e','f','g','h']
+
 while True:
+    event("White's turn:")
     pieces_coords = []
     whites_coords = []
     blacks_coords = []
@@ -264,4 +267,33 @@ while True:
     for black in Pieces.blacks:
         blacks_coords.append([black.x,black.y])
     board()
+    event('Which piece do you want to move?')
+    print('OBS: You can write the number on left, or the respective board position')
+    i = 0
+    for c,piece in enumerate(Pieces.whites):
+        print(f'{f"[{c}] {type(piece).__name__}":<11} ({letters[piece.x]}{piece.y+1})      ',end='')
+        i += 1
+        if i == 4:
+            print('')
+            i = 0
+    print('')
+    choice = input('Your choice: ')
+    while True:
+        try:
+            int(choice)
+            if int(choice) in range(0,len(Pieces.whites)):
+                choice = Pieces.whites[int(choice)]
+                break
+            else:
+                choice = input('Invalid choice, please try again: ')
+        except ValueError:
+            if len(choice) == 2 and choice[0].isalpha() and choice[1].isnumeric():
+                if [letters.index(choice[0]),int(choice[1])-1] in whites_coords:
+                    choice = Pieces.whites[whites_coords.index([letters.index(choice[0]),int(choice[1])-1])]
+                    break
+                else:
+                    choice = input('Invalid choice, please try again: ')
+            else:
+                choice = input('Invalid choice, please try again: ')
+    event(f'You choose {choice.color.capitalize()} {type(choice).__name__} ({letters[choice.x]}{choice.y+1})')
     break
