@@ -21,13 +21,13 @@ class Pawn(Pieces):
             for c in range(0,2):
                 self.y += 1
                 poss.append([self.x,self.y])
-                if [self.x,self.y+1] in pieces_coords:
+                if [self.x,self.y] in pieces_coords:
                     break
         elif self.color == 'black':
             for c in range(0,2):
                 self.y -= 1
                 poss.append([self.x,self.y])
-                if [self.x,self.y+1] in pieces_coords:
+                if [self.x,self.y] in pieces_coords:
                     break
         self.x,self.y = startx,starty
         return poss
@@ -36,12 +36,31 @@ class Rook(Pieces):
     emoji = '♜'
     def move_possibilites(self):
         poss = []
-        for x in range(0,8):
-            if x != self.x:
-                poss.append([x,self.y])
-        for y in range(0,8):
-            if y != self.y:
-                poss.append([self.x,y])
+        startx,starty = self.x,self.y
+        while self.y < 8:
+            self.y += 1
+            poss.append([self.x,self.y])
+            if [self.x,self.y] in pieces_coords:
+                break
+        self.y = starty
+        while self.y > -1:
+            self.y -= 1
+            poss.append([self.x,self.y])
+            if [self.x,self.y] in pieces_coords:
+                break
+        self.y = starty
+        while self.x < 8:
+            self.x += 1
+            poss.append([self.x,self.y])
+            if [self.x,self.y] in pieces_coords:
+                break
+        self.x = startx
+        while self.x > -1:
+            self.x -= 1
+            poss.append([self.x,self.y])
+            if [self.x,self.y] in pieces_coords:
+                break
+        self.x = startx
         return poss
 
 class Horse(Pieces):
@@ -53,11 +72,35 @@ class Bishop(Pieces):
     emoji = '♝'
     def move_possibilites(self):
         poss = []
-        for x in range(0,8):
-            for y in range(0,8):
-                if (x - self.x == y - self.y) or (x - self.x == self.y - y):
-                    if (x,y) != (self.x,self.y):
-                        poss.append([x,y])
+        startx,starty = self.x,self.y
+        for c in range(0,8):
+            self.x += 1
+            self.y += 1
+            poss.append([self.x,self.y])
+            if [self.x,self.y] in pieces_coords:
+                break
+        self.x,self.y = startx,starty
+        for c in range(0,8):
+            self.x -= 1
+            self.y += 1
+            poss.append([self.x,self.y])
+            if [self.x,self.y] in pieces_coords:
+                break
+        self.x,self.y = startx,starty
+        for c in range(0,8):
+            self.x += 1
+            self.y -= 1
+            poss.append([self.x,self.y])
+            if [self.x,self.y] in pieces_coords:
+                break
+        self.x,self.y = startx,starty
+        for c in range(0,8):
+            self.x -= 1
+            self.y -= 1
+            poss.append([self.x,self.y])
+            if [self.x,self.y] in pieces_coords:
+                break
+        self.x,self.y = startx,starty
         return poss
 
 class King(Pieces):
@@ -75,20 +118,62 @@ class Queen(Pieces):
     emoji = '♛'
     def move_possibilites(self):
         poss = []
-        for x in range(0,8):
-            if x != self.x:
-                poss.append([x,self.y])
-            for y in range(0,8):
-                if (x - self.x == y - self.y) or (x - self.x == self.y - y):
-                    if (x,y) != (self.x,self.y):
-                        poss.append([x,y])
-        for y in range(0,8):
-            if y != self.y:
-                poss.append([self.x,y])
+        startx,starty = self.x,self.y
+        while self.y < 8:
+            self.y += 1
+            poss.append([self.x,self.y])
+            if [self.x,self.y] in pieces_coords:
+                break
+        self.y = starty
+        while self.y > -1:
+            self.y -= 1
+            poss.append([self.x,self.y])
+            if [self.x,self.y] in pieces_coords:
+                break
+        self.y = starty
+        while self.x < 8:
+            self.x += 1
+            poss.append([self.x,self.y])
+            if [self.x,self.y] in pieces_coords:
+                break
+        self.x = startx
+        while self.x > -1:
+            self.x -= 1
+            poss.append([self.x,self.y])
+            if [self.x,self.y] in pieces_coords:
+                break
+        self.x = startx
+        for c in range(0,8):
+            self.x += 1
+            self.y += 1
+            poss.append([self.x,self.y])
+            if [self.x,self.y] in pieces_coords:
+                break
+        self.x,self.y = startx,starty
+        for c in range(0,8):
+            self.x -= 1
+            self.y += 1
+            poss.append([self.x,self.y])
+            if [self.x,self.y] in pieces_coords:
+                break
+        self.x,self.y = startx,starty
+        for c in range(0,8):
+            self.x += 1
+            self.y -= 1
+            poss.append([self.x,self.y])
+            if [self.x,self.y] in pieces_coords:
+                break
+        self.x,self.y = startx,starty
+        for c in range(0,8):
+            self.x -= 1
+            self.y -= 1
+            poss.append([self.x,self.y])
+            if [self.x,self.y] in pieces_coords:
+                break
+        self.x,self.y = startx,starty
         return poss
 
 def board(piece=0):
-    print(piece.move_possibilites())
     print('-'*35)
     for y in range(7,-1,-1):
         print(f'{y+1} ',end = ' ')
@@ -97,26 +182,26 @@ def board(piece=0):
                 if piece != 0 and [x,y] in whites_coords and piece.color == 'black' and [x,y] in piece.move_possibilites():
                     print(f'\033[37;41m{Pieces.whites[whites_coords.index([x,y])].emoji:^3} \033[m',end = '')
                 elif piece != 0 and ([x,y] in blacks_coords and piece.color == 'white') and [x,y] in piece.move_possibilites():
-                    print(f'\033[37;41m{Pieces.blacks[blacks_coords.index([x,y])].emoji:^3} \033[m',end = '')
+                    print(f'\033[30;41m{Pieces.blacks[blacks_coords.index([x,y])].emoji:^3} \033[m',end = '')
                 elif [x,y] in whites_coords:
                     print(f'\033[37;40m{Pieces.whites[whites_coords.index([x,y])].emoji:^3} \033[m',end = '')
                 elif [x,y] in blacks_coords:
                     print(f'\033[30;40m{Pieces.blacks[blacks_coords.index([x,y])].emoji:^3} \033[m',end = '')
                 elif piece != 0 and [x,y] in piece.move_possibilites():
-                    print(f'\033[42m    \033[m',end='')
+                    print(f'\033[30;44m    \033[m',end='')
                 elif [x,y] not in pieces_coords:
                     print(f'\033[40m    \033[m',end='')
             else:
                 if piece != 0 and [x,y] in whites_coords and piece.color == 'black' and [x,y] in piece.move_possibilites():
                     print(f'\033[37;41m{Pieces.whites[whites_coords.index([x,y])].emoji:^3} \033[m',end = '')
                 elif piece != 0 and ([x,y] in blacks_coords and piece.color == 'white') and [x,y] in piece.move_possibilites():
-                    print(f'\033[37;41m{Pieces.blacks[blacks_coords.index([x,y])].emoji:^3} \033[m',end = '')
+                    print(f'\033[30;41m{Pieces.blacks[blacks_coords.index([x,y])].emoji:^3} \033[m',end = '')
                 elif [x,y] in whites_coords:
                     print(f'\033[37;47m{Pieces.whites[whites_coords.index([x,y])].emoji:^3} \033[m',end = '')
                 elif [x,y] in blacks_coords:
                     print(f'\033[30;47m{Pieces.blacks[blacks_coords.index([x,y])].emoji:^3} \033[m',end = '')
                 elif piece != 0 and [x,y] in piece.move_possibilites():
-                    print(f'\033[42m    \033[m',end='')
+                    print(f'\033[37;46m    \033[m',end='')
                 elif [x,y] not in pieces_coords:
                     print(f'\033[47m    \033[m',end='')
         print('')
@@ -135,7 +220,7 @@ def move_event(a,b=0):
         print(f'{a.color.capitalize()} {type(a).__name__} ate {b.color.capitalize()} {type(b).__name__}'.center(30))
     print('-='*15)
 
-wp1 = Pawn(0,5,'white')
+wp1 = Pawn(0,1,'white')
 wp2 = Pawn(1,1,'white')
 wp3 = Pawn(2,1,'white')
 wp4 = Pawn(3,1,'white')
@@ -178,6 +263,5 @@ while True:
         whites_coords.append([white.x,white.y])
     for black in Pieces.blacks:
         blacks_coords.append([black.x,black.y])
-    board(wp1)
+    board()
     break
-
