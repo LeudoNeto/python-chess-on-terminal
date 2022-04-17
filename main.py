@@ -20,14 +20,14 @@ class Pawn(Pieces):
         if self.color == 'white':
             for c in range(0,2):
                 self.y += 1
-                if self.y < 8:
+                if self.y < 8 and [self.x,self.y] not in whites_coords:
                     poss.append([self.x,self.y])
                 if [self.x,self.y] in pieces_coords:
                     break
         elif self.color == 'black':
             for c in range(0,2):
                 self.y -= 1
-                if self.y > -1:
+                if self.y > -1 and [self.x,self.y] not in blacks_coords:
                     poss.append([self.x,self.y])
                 if [self.x,self.y] in pieces_coords:
                     break
@@ -41,25 +41,29 @@ class Rook(Pieces):
         startx,starty = self.x,self.y
         while self.y < 7:
             self.y += 1
-            poss.append([self.x,self.y])
+            if (self.color == 'white' and [self.x,self.y] not in whites_coords) or (self.color == 'black' and [self.x,self.y] not in blacks_coords):
+                poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.y = starty
         while self.y > 0:
             self.y -= 1
-            poss.append([self.x,self.y])
+            if (self.color == 'white' and [self.x,self.y] not in whites_coords) or (self.color == 'black' and [self.x,self.y] not in blacks_coords):
+                poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.y = starty
         while self.x < 7:
             self.x += 1
-            poss.append([self.x,self.y])
+            if (self.color == 'white' and [self.x,self.y] not in whites_coords) or (self.color == 'black' and [self.x,self.y] not in blacks_coords):
+                poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.x = startx
         while self.x > 0:
             self.x -= 1
-            poss.append([self.x,self.y])
+            if (self.color == 'white' and [self.x,self.y] not in whites_coords) or (self.color == 'black' and [self.x,self.y] not in blacks_coords):
+                poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.x = startx
@@ -74,7 +78,8 @@ class Horse(Pieces):
             self.x = c[0]
             self.y = c[1]
             if -1 < self.x < 8 and -1 < self.y < 8:
-                poss.append(c)
+                if (self.color == 'white' and [self.x,self.y] not in whites_coords) or (self.color == 'black' and [self.x,self.y] not in blacks_coords):
+                    poss.append(c)
         self.x,self.y = startx,starty
         return poss
 
@@ -86,28 +91,32 @@ class Bishop(Pieces):
         while self.y < 7 and self.x < 7:
             self.x += 1
             self.y += 1
-            poss.append([self.x,self.y])
+            if (self.color == 'white' and [self.x,self.y] not in whites_coords) or (self.color == 'black' and [self.x,self.y] not in blacks_coords):
+                poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.x,self.y = startx,starty
         while self.y < 7 and self.x > 0:
             self.x -= 1
             self.y += 1
-            poss.append([self.x,self.y])
+            if (self.color == 'white' and [self.x,self.y] not in whites_coords) or (self.color == 'black' and [self.x,self.y] not in blacks_coords):
+                poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.x,self.y = startx,starty
         while self.x < 7 and self.y > 0:
             self.x += 1
             self.y -= 1
-            poss.append([self.x,self.y])
+            if (self.color == 'white' and [self.x,self.y] not in whites_coords) or (self.color == 'black' and [self.x,self.y] not in blacks_coords):
+                poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.x,self.y = startx,starty
         while self.x > 0 and self.y > 0:
             self.x -= 1
             self.y -= 1
-            poss.append([self.x,self.y])
+            if (self.color == 'white' and [self.x,self.y] not in whites_coords) or (self.color == 'black' and [self.x,self.y] not in blacks_coords):
+                poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.x,self.y = startx,starty
@@ -121,7 +130,8 @@ class King(Pieces):
             for y in range(0,8):
                 if (-2 < x - self.x < 2) and (-2 < y - self.y < 2):
                     if (x,y) != (self.x,self.y):
-                        poss.append([x,y])
+                        if (self.color == 'white' and [self.x,self.y] not in whites_coords) or (self.color == 'black' and [self.x,self.y] not in blacks_coords):
+                            poss.append([x,y])
         return poss
 
 class Queen(Pieces):
@@ -131,53 +141,61 @@ class Queen(Pieces):
         startx,starty = self.x,self.y
         while self.y < 7:
             self.y += 1
-            poss.append([self.x,self.y])
+            if (self.color == 'white' and [self.x,self.y] not in whites_coords) or (self.color == 'black' and [self.x,self.y] not in blacks_coords):
+                poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.y = starty
         while self.y > 0:
             self.y -= 1
-            poss.append([self.x,self.y])
+            if (self.color == 'white' and [self.x,self.y] not in whites_coords) or (self.color == 'black' and [self.x,self.y] not in blacks_coords):
+                poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.y = starty
         while self.x < 7:
             self.x += 1
-            poss.append([self.x,self.y])
+            if (self.color == 'white' and [self.x,self.y] not in whites_coords) or (self.color == 'black' and [self.x,self.y] not in blacks_coords):
+                poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.x = startx
         while self.x > 0:
             self.x -= 1
-            poss.append([self.x,self.y])
+            if (self.color == 'white' and [self.x,self.y] not in whites_coords) or (self.color == 'black' and [self.x,self.y] not in blacks_coords):
+                poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.x = startx
         while self.y < 7 and self.x < 7:
             self.x += 1
             self.y += 1
-            poss.append([self.x,self.y])
+            if (self.color == 'white' and [self.x,self.y] not in whites_coords) or (self.color == 'black' and [self.x,self.y] not in blacks_coords):
+                poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.x,self.y = startx,starty
         while self.y < 7 and self.x > 0:
             self.x -= 1
             self.y += 1
-            poss.append([self.x,self.y])
+            if (self.color == 'white' and [self.x,self.y] not in whites_coords) or (self.color == 'black' and [self.x,self.y] not in blacks_coords):
+                poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.x,self.y = startx,starty
         while self.y > 0 and self.x < 7:
             self.x += 1
             self.y -= 1
-            poss.append([self.x,self.y])
+            if (self.color == 'white' and [self.x,self.y] not in whites_coords) or (self.color == 'black' and [self.x,self.y] not in blacks_coords):
+                poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.x,self.y = startx,starty
-        while self.y > 0 and self.x > 7:
+        while self.y > 0 and self.x > 0:
             self.x -= 1
             self.y -= 1
-            poss.append([self.x,self.y])
+            if (self.color == 'white' and [self.x,self.y] not in whites_coords) or (self.color == 'black' and [self.x,self.y] not in blacks_coords):
+                poss.append([self.x,self.y])
             if [self.x,self.y] in pieces_coords:
                 break
         self.x,self.y = startx,starty
@@ -264,9 +282,10 @@ wk = King(4,0,'white')
 bk = King(3,7,'black')
 
 letters = ['a','b','c','d','e','f','g','h']
+end = False
 
 while True:
-    event("White's turn:")
+    event("Whites' turn:")
     pieces_coords = []
     whites_coords = []
     blacks_coords = []
@@ -315,30 +334,122 @@ while True:
         if i == 4:
             print('')
             i = 0
-    print('')
+    print('[0] BACK')
     poschoice = input('Your choice: ')
-    while True:
-        try:
-            int(poschoice)
-            if int(poschoice) in range(1,len(choice.move_possibilites())+1):
-                poschoice = choice.move_possibilites()[int(poschoice)-1]
-                break
-            else:
-                poschoice = input('Invalid choice, please try again: ')
-        except ValueError:
-            if len(poschoice) == 2 and poschoice[0].isalpha() and poschoice[1].isnumeric():
-                if [letters.index(poschoice[0]),int(poschoice[1])-1] in choice.move_possibilites():
-                    poschoice = [letters.index(poschoice[0]),int(poschoice[1])-1]
+    if poschoice == '0':
+        continue
+    else:
+        while True:
+            try:
+                int(poschoice)
+                if int(poschoice) in range(1,len(choice.move_possibilites())+1):
+                    poschoice = choice.move_possibilites()[int(poschoice)-1]
                     break
                 else:
                     poschoice = input('Invalid choice, please try again: ')
+            except ValueError:
+                if len(poschoice) == 2 and poschoice[0].isalpha() and poschoice[1].isnumeric():
+                    if [letters.index(poschoice[0]),int(poschoice[1])-1] in choice.move_possibilites():
+                        poschoice = [letters.index(poschoice[0]),int(poschoice[1])-1]
+                        break
+                    else:
+                        poschoice = input('Invalid choice, please try again: ')
+                else:
+                    poschoice = input('Invalid choice, please try again: ')
+        if poschoice in blacks_coords:
+            move_event(choice,poschoice,Pieces.blacks[blacks_coords.index(poschoice)])
+            if type(Pieces.blacks[blacks_coords.index(poschoice)]) == King:
+                event('Whites won the game.')
+                break
+            Pieces.blacks.pop(blacks_coords.index(poschoice))
+            Pieces.alives.pop(pieces_coords.index(poschoice))
+            [choice.x,choice.y] = poschoice
+        else:
+            move_event(choice,poschoice)
+            [choice.x,choice.y] = poschoice
+        while True:
+            event("Blacks' turn:")
+            pieces_coords = []
+            whites_coords = []
+            blacks_coords = []
+            for piece in Pieces.alives:
+                pieces_coords.append([piece.x,piece.y])
+            for white in Pieces.whites:
+                whites_coords.append([white.x,white.y])
+            for black in Pieces.blacks:
+                blacks_coords.append([black.x,black.y])
+            board()
+            event('Which piece do you want to move?')
+            print('OBS: You can write the number on left, or the respective board position')
+            i = 0
+            for c,piece in enumerate(Pieces.blacks):
+                print(f'{f"[{c+1}] {type(piece).__name__}":<11} ({letters[piece.x]}{piece.y+1})      ',end='')
+                i += 1
+                if i == 4:
+                    print('')
+                    i = 0
+            print('')
+            choice = input('Your choice: ')
+            while True:
+                try:
+                    int(choice)
+                    if int(choice) in range(1,len(Pieces.blacks)+1):
+                        choice = Pieces.blacks[int(choice)-1]
+                        break
+                    else:
+                        choice = input('Invalid choice, please try again: ')
+                except ValueError:
+                    if len(choice) == 2 and choice[0].isalpha() and choice[1].isnumeric():
+                        if [letters.index(choice[0]),int(choice[1])-1] in blacks_coords:
+                            choice = Pieces.blacks[blacks_coords.index([letters.index(choice[0]),int(choice[1])-1])]
+                            break
+                        else:
+                            choice = input('Invalid choice, please try again: ')
+                    else:
+                        choice = input('Invalid choice, please try again: ')
+            event(f'You choose {choice.color.capitalize()} {type(choice).__name__} ({letters[choice.x]}{choice.y+1})')
+            board(choice)
+            event(f'Where do you want to move {choice.color.capitalize()} {type(choice).__name__}?')
+            print('OBS: You can write the number on left, or the respective board position')
+            for c,pos in enumerate(choice.move_possibilites()):
+                print(f'{f"[{c+1}] {letters[pos[0]]}{pos[1]+1}":<14}',end='')
+                i += 1
+                if i == 4:
+                    print('')
+                    i = 0
+            print('[0] BACK')
+            poschoice = input('Your choice: ')
+            if poschoice == '0':
+                continue
             else:
-                poschoice = input('Invalid choice, please try again: ')
-    if poschoice in blacks_coords:
-        move_event(choice,poschoice,Pieces.blacks[blacks_coords.index(poschoice)])
-        Pieces.blacks.pop(blacks_coords.index(poschoice))
-        Pieces.alives.pop(pieces_coords.index(poschoice))
-        [choice.x,choice.y] = poschoice
-    else:
-        move_event(choice,poschoice)
-        [choice.x,choice.y] = poschoice
+                while True:
+                    try:
+                        int(poschoice)
+                        if int(poschoice) in range(1,len(choice.move_possibilites())+1):
+                            poschoice = choice.move_possibilites()[int(poschoice)-1]
+                            break
+                        else:
+                            poschoice = input('Invalid choice, please try again: ')
+                    except ValueError:
+                        if len(poschoice) == 2 and poschoice[0].isalpha() and poschoice[1].isnumeric():
+                            if [letters.index(poschoice[0]),int(poschoice[1])-1] in choice.move_possibilites():
+                                poschoice = [letters.index(poschoice[0]),int(poschoice[1])-1]
+                                break
+                            else:
+                                poschoice = input('Invalid choice, please try again: ')
+                        else:
+                            poschoice = input('Invalid choice, please try again: ')
+                if poschoice in whites_coords:
+                    move_event(choice,poschoice,Pieces.whites[whites_coords.index(poschoice)])
+                    if type(Pieces.whites[whites_coords.index(poschoice)]) == King:
+                        event('Blacks won the game.')
+                        end = True
+                    Pieces.whites.pop(whites_coords.index(poschoice))
+                    Pieces.alives.pop(pieces_coords.index(poschoice))
+                    [choice.x,choice.y] = poschoice
+                else:
+                    move_event(choice,poschoice)
+                    [choice.x,choice.y] = poschoice
+                break
+    if end:
+        break
