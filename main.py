@@ -18,16 +18,24 @@ class Pawn(Pieces):
         poss = []
         startx,starty = self.x,self.y
         if self.color == 'white':
+            if [self.x+1,self.y+1] in blacks_coords:
+                poss.append([self.x+1,self.y+1])
+            if [self.x-1,self.y+1] in blacks_coords:
+                poss.append([self.x-1,self.y+1])
             for c in range(0,2):
                 self.y += 1
-                if self.y < 8 and [self.x,self.y] not in whites_coords:
+                if self.y < 8 and [self.x,self.y] not in pieces_coords:
                     poss.append([self.x,self.y])
                 if [self.x,self.y] in pieces_coords:
                     break
         elif self.color == 'black':
+            if [self.x+1,self.y-1] in whites_coords:
+                poss.append([self.x+1,self.y-1])
+            if [self.x-1,self.y-1] in whites_coords:
+                poss.append([self.x-1,self.y-1])
             for c in range(0,2):
                 self.y -= 1
-                if self.y > -1 and [self.x,self.y] not in blacks_coords:
+                if self.y > -1 and [self.x,self.y] not in pieces_coords:
                     poss.append([self.x,self.y])
                 if [self.x,self.y] in pieces_coords:
                     break
