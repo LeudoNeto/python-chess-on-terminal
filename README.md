@@ -1,1 +1,1 @@
-# python-chess-on-terminal
+# python chess on terminal
