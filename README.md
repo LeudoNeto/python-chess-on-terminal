@@ -1,1 +1,1 @@
-# python chess on terminal
+# Python Chess on Terminal
