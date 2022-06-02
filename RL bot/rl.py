@@ -1,5 +1,37 @@
+import json
+
 class RLbot:
-    pass
+    def __init__(self, color):
+        self.color = color
+        with open('RL bot/bot_good_db.json','r') as db:
+            self.good_db = json.load(db)
+        with open('RL bot/bot_bad_db.json','r') as db:
+            self.bad_db = json.load(db)
+
+    def play(self,max):
+        self.vision = []
+        y_range = range(7,-1,-1)
+        if self.color == 'black':
+            y_range = reversed(y_range)
+        for y in y_range:
+            self.vision.append([])
+            for x in range(0,8):
+                if [x,y] in pieces_coords:
+                    if self.color == 'white':
+                        if Pieces.alives[pieces_coords.index([x,y])].color == 'white':
+                            pass
+                    else:
+                        pass
+                else:
+                    if self.color == 'white':
+                        self.vision[7-y].append(0)
+                    else:
+                        self.vision[y].append(0)
+
+
+
+    def analyze(self):
+        pass
 
 class Pieces:
     alives = []
