@@ -3,12 +3,13 @@ import json
 class RLbot:
     def __init__(self, color):
         self.color = color
-        with open('RL bot/bot_good_db.json','r') as db:
-            self.good_db = json.load(db)
-        with open('RL bot/bot_bad_db.json','r') as db:
-            self.bad_db = json.load(db)
+        with open('RL bot/bot_db.json','r') as db:
+            self.good_db = json.load(db)['good']
+        with open('RL bot/bot_db.json','r') as db:
+            self.bad_db = json.load(db)['bad']
 
     def play(self,max):
+        pieces_initial_letter = ['K','Q','R','H','B','P']
         self.vision = []
         y_range = range(7,-1,-1)
         if self.color == 'black':
@@ -17,18 +18,33 @@ class RLbot:
             self.vision.append([])
             for x in range(0,8):
                 if [x,y] in pieces_coords:
+                    piece_initial_letter = pieces_initial_letter[[King,Queen,Rook,Horse,Bishop,Pawn].index(type(Pieces.alives[pieces_coords.index([x,y])]))]
                     if self.color == 'white':
                         if Pieces.alives[pieces_coords.index([x,y])].color == 'white':
-                            pass
+                            piece_team = 'M'
+                        else:
+                            piece_team = 'E'
+                        self.vision[7-y].append(piece_team+piece_initial_letter)
                     else:
-                        pass
+                        if Pieces.alives[pieces_coords.index([x,y])].color == 'white':
+                            piece_team = 'E'
+                        else:
+                            piece_team = 'M'
+                        self.vision[y].append(piece_team+piece_initial_letter)
                 else:
                     if self.color == 'white':
                         self.vision[7-y].append(0)
                     else:
                         self.vision[y].append(0)
+        if str(self.vision) in self.good_db.keys():
+            pass
+        elif str(self.vision) in self.bad_db.keys():
+            pass
+        else:
+            pass
 
-
+    def move(self,max):
+        pass
 
     def analyze(self):
         pass
@@ -324,6 +340,8 @@ bq = Queen(4,7,'black')
 wk = King(4,0,'white')
 bk = King(3,7,'black')
 
+bot = RLbot('white')
+
 letters = ['a','b','c','d','e','f','g','h']
 end = False
 
@@ -338,6 +356,9 @@ while True:
         whites_coords.append([white.x,white.y])
     for black in Pieces.blacks:
         blacks_coords.append([black.x,black.y])
+
+    bot.play()
+
     board()
     event('Which piece do you want to move?')
     print('OBS: You can write the number on left, or the respective board position')
