@@ -1,5 +1,5 @@
-import pygame as pg
-import asyncio
+class RLbot:
+    pass
 
 class Pieces:
     alives = []
@@ -295,9 +295,6 @@ bk = King(3,7,'black')
 letters = ['a','b','c','d','e','f','g','h']
 end = False
 
-width,height = 1000,700
-pg.display.set_mode((width,height))
-pg.quit()
 while True:
     event("Whites' turn:")
     pieces_coords = []
