@@ -51,10 +51,11 @@ class RLbot:
                 while True:
                     try:
                         if self.color == 'white':
-                            choice = Pieces.whites[int(randint(0,len(Pieces.whites)-1))]
+                            choice = randint(0,len(Pieces.whites)-1)
+                            self.bot_move = [choice,randint(0,len(Pieces.whites[choice].move_possibilites())-1)]
                         else:
-                            choice = Pieces.blacks[int(randint(0,len(Pieces.blacks)-1))]
-                        self.bot_move = [choice,randint(0,len(choice.move_possibilites())-1)]
+                            choice = randint(0,len(Pieces.blacks)-1)
+                            self.bot_move = [choice,randint(0,len(Pieces.blacks[choice].move_possibilites())-1)]
                         if self.bot_move not in self.bad_db.values():
                             return self.bot_move[0]
                     except ValueError:
@@ -64,8 +65,8 @@ class RLbot:
         elif self.color == 'white':
             while True:
                 try:
-                    choice = Pieces.whites[int(randint(0,len(Pieces.whites)-1))]
-                    self.bot_move = [choice,randint(0,len(choice.move_possibilites())-1)]
+                    choice = randint(0,len(Pieces.whites)-1)
+                    self.bot_move = [choice,randint(0,len(Pieces.whites[choice].move_possibilites())-1)]
                 except ValueError:
                     continue
                 else:
@@ -73,8 +74,8 @@ class RLbot:
         else:
             while True:
                 try:
-                    choice = Pieces.blacks[int(randint(0,len(Pieces.blacks)-1))]
-                    self.bot_move = [choice,randint(0,len(choice.move_possibilites())-1)]
+                    choice = randint(0,len(Pieces.blacks)-1)
+                    self.bot_move = [choice,randint(0,len(Pieces.blacks[choice].move_possibilites())-1)]
                 except ValueError:
                     continue
                 else:
@@ -433,7 +434,7 @@ while True:
             print('')
             i = 0
     print('')
-    choice = whites.play()
+    choice = Pieces.whites[whites.play()]
     event(f'You choose {choice.color.capitalize()} {type(choice).__name__} ({letters[choice.x]}{choice.y+1})')
     board(choice)
     event(f'Where do you want to move {choice.color.capitalize()} {type(choice).__name__}?')
@@ -485,7 +486,7 @@ while True:
                 print('')
                 i = 0
         print('')
-        choice = blacks.play()
+        choice = Pieces.blacks[blacks.play()]
         event(f'You choose {choice.color.capitalize()} {type(choice).__name__} ({letters[choice.x]}{choice.y+1})')
         board(choice)
         event(f'Where do you want to move {choice.color.capitalize()} {type(choice).__name__}?')
@@ -518,11 +519,9 @@ while True:
     if end:
         break
 
-whites.database.update(blacks.database)
+blacks.database.update(whites.database)
 
 with open('RL bot/bot_db.json','w') as db:
     json.dump(whites.database,db)
 
-print(whites.good_db)
-print(blacks.good_db)
 print(f'{turns} turns played')
