@@ -1,4 +1,5 @@
 import json
+from random import randint
 
 class RLbot:
     def __init__(self, color):
@@ -8,7 +9,7 @@ class RLbot:
         with open('RL bot/bot_db.json','r') as db:
             self.bad_db = json.load(db)['bad']
 
-    def play(self,max):
+    def play(self):
         pieces_initial_letter = ['K','Q','R','H','B','P']
         self.vision = []
         y_range = range(7,-1,-1)
@@ -37,14 +38,45 @@ class RLbot:
                     else:
                         self.vision[y].append(0)
         if str(self.vision) in self.good_db.keys():
-            pass
+            self.bot_move = self.good_db[str(self.vision)]
+            return self.bot_move[0]
         elif str(self.vision) in self.bad_db.keys():
-            pass
+            for i in range(50):
+                while True:
+                    try:
+                        if self.color == 'white':
+                            choice = Pieces.whites[int(randint(0,len(Pieces.whites)-1))]
+                        else:
+                            choice = Pieces.blacks[int(randint(0,len(Pieces.blacks)-1))]
+                        self.bot_move = [choice,randint(0,len(choice.move_possibilites())-1)]
+                        if self.bot_move not in self.bad_db.values():
+                            return self.bot_move[0]
+                    except ValueError:
+                        continue
+                    else:
+                        break
+        elif self.color == 'white':
+            while True:
+                try:
+                    choice = Pieces.whites[int(randint(0,len(Pieces.whites)-1))]
+                    self.bot_move = [choice,randint(0,len(choice.move_possibilites())-1)]
+                except ValueError:
+                    continue
+                else:
+                    break
         else:
-            pass
-
-    def move(self,max):
-        pass
+            while True:
+                try:
+                    choice = Pieces.blacks[int(randint(0,len(Pieces.blacks)-1))]
+                    self.bot_move = [choice,randint(0,len(choice.move_possibilites())-1)]
+                except ValueError:
+                    continue
+                else:
+                    break
+        return self.bot_move[0]
+            
+    def move(self):
+        return self.bot_move[1]
 
     def analyze(self):
         pass
@@ -340,12 +372,15 @@ bq = Queen(4,7,'black')
 wk = King(4,0,'white')
 bk = King(3,7,'black')
 
-bot = RLbot('white')
+whites = RLbot('white')
+blacks = RLbot('black')
 
 letters = ['a','b','c','d','e','f','g','h']
 end = False
 
+turns = 0
 while True:
+    turns += 1
     event("Whites' turn:")
     pieces_coords = []
     whites_coords = []
@@ -356,9 +391,6 @@ while True:
         whites_coords.append([white.x,white.y])
     for black in Pieces.blacks:
         blacks_coords.append([black.x,black.y])
-
-    bot.play()
-
     board()
     event('Which piece do you want to move?')
     print('OBS: You can write the number on left, or the respective board position')
@@ -370,24 +402,7 @@ while True:
             print('')
             i = 0
     print('')
-    choice = input('Your choice: ')
-    while True:
-        try:
-            int(choice)
-            if int(choice) in range(1,len(Pieces.whites)+1):
-                choice = Pieces.whites[int(choice)-1]
-                break
-            else:
-                choice = input('Invalid choice, please try again: ')
-        except ValueError:
-            if len(choice) == 2 and choice[0].isalpha() and choice[1].isnumeric():
-                if [letters.index(choice[0]),int(choice[1])-1] in whites_coords:
-                    choice = Pieces.whites[whites_coords.index([letters.index(choice[0]),int(choice[1])-1])]
-                    break
-                else:
-                    choice = input('Invalid choice, please try again: ')
-            else:
-                choice = input('Invalid choice, please try again: ')
+    choice = whites.play()
     event(f'You choose {choice.color.capitalize()} {type(choice).__name__} ({letters[choice.x]}{choice.y+1})')
     board(choice)
     event(f'Where do you want to move {choice.color.capitalize()} {type(choice).__name__}?')
@@ -400,132 +415,73 @@ while True:
             print('')
             i = 0
     print('[0] BACK')
-    poschoice = input('Your choice: ')
-    if poschoice == '0':
-        continue
+
+    poschoice = choice.move_possibilites()[int(whites.move())]
+    if poschoice in blacks_coords:
+        move_event(choice,poschoice,Pieces.blacks[blacks_coords.index(poschoice)])
+        if type(Pieces.blacks[blacks_coords.index(poschoice)]) == King:
+            event('Whites won the game.')
+            break
+        Pieces.blacks.pop(blacks_coords.index(poschoice))
+        Pieces.alives.pop(pieces_coords.index(poschoice))
+        [choice.x,choice.y] = poschoice
+    elif type(poschoice) == list:
+        move_event(choice,poschoice)
+        [choice.x,choice.y] = poschoice
     else:
+        continue
+    if poschoice != 0:
         while True:
-            try:
-                int(poschoice)
-                if int(poschoice) == 0:
-                    break
-                elif int(poschoice) in range(1,len(choice.move_possibilites())+1):
-                    poschoice = choice.move_possibilites()[int(poschoice)-1]
-                    break
-                else:
-                    poschoice = input('Invalid choice, please try again: ')
-            except ValueError:
-                if len(poschoice) == 2 and poschoice[0].isalpha() and poschoice[1].isnumeric():
-                    if [letters.index(poschoice[0]),int(poschoice[1])-1] in choice.move_possibilites():
-                        poschoice = [letters.index(poschoice[0]),int(poschoice[1])-1]
-                        break
-                    else:
-                        poschoice = input('Invalid choice, please try again: ')
-                else:
-                    poschoice = input('Invalid choice, please try again: ')
-        if poschoice in blacks_coords:
-            move_event(choice,poschoice,Pieces.blacks[blacks_coords.index(poschoice)])
-            if type(Pieces.blacks[blacks_coords.index(poschoice)]) == King:
-                event('Whites won the game.')
+            event("Blacks' turn:")
+            pieces_coords = []
+            whites_coords = []
+            blacks_coords = []
+            for piece in Pieces.alives:
+                pieces_coords.append([piece.x,piece.y])
+            for white in Pieces.whites:
+                whites_coords.append([white.x,white.y])
+            for black in Pieces.blacks:
+                blacks_coords.append([black.x,black.y])
+            board()
+            event('Which piece do you want to move?')
+            print('OBS: You can write the number on left, or the respective board position')
+            i = 0
+            for c,piece in enumerate(Pieces.blacks):
+                print(f'{f"[{c+1}] {type(piece).__name__}":<11} ({letters[piece.x]}{piece.y+1})      ',end='')
+                i += 1
+                if i == 4:
+                    print('')
+                    i = 0
+            print('')
+            choice = blacks.play()
+            event(f'You choose {choice.color.capitalize()} {type(choice).__name__} ({letters[choice.x]}{choice.y+1})')
+            board(choice)
+            event(f'Where do you want to move {choice.color.capitalize()} {type(choice).__name__}?')
+            print('OBS: You can write the number on left, or the respective board position')
+            i = 0
+            for c,pos in enumerate(choice.move_possibilites()):
+                print(f'{f"[{c+1}] {letters[pos[0]]}{pos[1]+1}":<14}',end='')
+                i += 1
+                if i == 4:
+                    print('')
+                    i = 0
+            print('[0] BACK')
+            poschoice = choice.move_possibilites()[int(blacks.move())]
+            if poschoice in whites_coords:
+                move_event(choice,poschoice,Pieces.whites[whites_coords.index(poschoice)])
+                if type(Pieces.whites[whites_coords.index(poschoice)]) == King:
+                    event('Blacks won the game.')
+                    end = True
+                Pieces.whites.pop(whites_coords.index(poschoice))
+                Pieces.alives.pop(pieces_coords.index(poschoice))
+                [choice.x,choice.y] = poschoice
                 break
-            Pieces.blacks.pop(blacks_coords.index(poschoice))
-            Pieces.alives.pop(pieces_coords.index(poschoice))
-            [choice.x,choice.y] = poschoice
-        elif type(poschoice) == list:
-            move_event(choice,poschoice)
-            [choice.x,choice.y] = poschoice
-        else:
-            continue
-        if poschoice != 0:
-            while True:
-                event("Blacks' turn:")
-                pieces_coords = []
-                whites_coords = []
-                blacks_coords = []
-                for piece in Pieces.alives:
-                    pieces_coords.append([piece.x,piece.y])
-                for white in Pieces.whites:
-                    whites_coords.append([white.x,white.y])
-                for black in Pieces.blacks:
-                    blacks_coords.append([black.x,black.y])
-                board()
-                event('Which piece do you want to move?')
-                print('OBS: You can write the number on left, or the respective board position')
-                i = 0
-                for c,piece in enumerate(Pieces.blacks):
-                    print(f'{f"[{c+1}] {type(piece).__name__}":<11} ({letters[piece.x]}{piece.y+1})      ',end='')
-                    i += 1
-                    if i == 4:
-                        print('')
-                        i = 0
-                print('')
-                choice = input('Your choice: ')
-                while True:
-                    try:
-                        int(choice)
-                        if int(choice) in range(1,len(Pieces.blacks)+1):
-                            choice = Pieces.blacks[int(choice)-1]
-                            break
-                        else:
-                            choice = input('Invalid choice, please try again: ')
-                    except ValueError:
-                        if len(choice) == 2 and choice[0].isalpha() and choice[1].isnumeric():
-                            if [letters.index(choice[0]),int(choice[1])-1] in blacks_coords:
-                                choice = Pieces.blacks[blacks_coords.index([letters.index(choice[0]),int(choice[1])-1])]
-                                break
-                            else:
-                                choice = input('Invalid choice, please try again: ')
-                        else:
-                            choice = input('Invalid choice, please try again: ')
-                event(f'You choose {choice.color.capitalize()} {type(choice).__name__} ({letters[choice.x]}{choice.y+1})')
-                board(choice)
-                event(f'Where do you want to move {choice.color.capitalize()} {type(choice).__name__}?')
-                print('OBS: You can write the number on left, or the respective board position')
-                i = 0
-                for c,pos in enumerate(choice.move_possibilites()):
-                    print(f'{f"[{c+1}] {letters[pos[0]]}{pos[1]+1}":<14}',end='')
-                    i += 1
-                    if i == 4:
-                        print('')
-                        i = 0
-                print('[0] BACK')
-                poschoice = input('Your choice: ')
-                if poschoice == '0':
-                    continue
-                else:
-                    while True:
-                        try:
-                            int(poschoice)
-                            if int(poschoice) == 0:
-                                break
-                            if int(poschoice) in range(1,len(choice.move_possibilites())+1):
-                                poschoice = choice.move_possibilites()[int(poschoice)-1]
-                                break
-                            else:
-                                poschoice = input('Invalid choice, please try again: ')
-                        except ValueError:
-                            if len(poschoice) == 2 and poschoice[0].isalpha() and poschoice[1].isnumeric():
-                                if [letters.index(poschoice[0]),int(poschoice[1])-1] in choice.move_possibilites():
-                                    poschoice = [letters.index(poschoice[0]),int(poschoice[1])-1]
-                                    break
-                                else:
-                                    poschoice = input('Invalid choice, please try again: ')
-                            else:
-                                poschoice = input('Invalid choice, please try again: ')
-                    if poschoice in whites_coords:
-                        move_event(choice,poschoice,Pieces.whites[whites_coords.index(poschoice)])
-                        if type(Pieces.whites[whites_coords.index(poschoice)]) == King:
-                            event('Blacks won the game.')
-                            end = True
-                        Pieces.whites.pop(whites_coords.index(poschoice))
-                        Pieces.alives.pop(pieces_coords.index(poschoice))
-                        [choice.x,choice.y] = poschoice
-                        break
-                    elif type(poschoice) == list:
-                        move_event(choice,poschoice)
-                        [choice.x,choice.y] = poschoice
-                        break
-                    else:
-                        continue
+            elif type(poschoice) == list:
+                move_event(choice,poschoice)
+                [choice.x,choice.y] = poschoice
+                break
+            else:
+                continue
     if end:
         break
+print(f'{turns} turns played')
