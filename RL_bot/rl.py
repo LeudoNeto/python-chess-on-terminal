@@ -4,7 +4,7 @@ from random import randint
 class RLbot:
     def __init__(self, color):
         self.color = color
-        with open('RL bot/bot_db.json','r') as db:
+        with open('RL_bot/bot_db.json','r') as db:
             self.database = json.load(db)
             self.good_db = self.database['good']
             self.bad_db = self.database['bad']
@@ -44,7 +44,6 @@ class RLbot:
                     else:
                         self.vision[y].append(0)
         if str(self.vision) in self.good_db.keys():
-            raise(Exception)
             self.bot_move = self.good_db[str(self.vision)]
             return self.bot_move[0]
         elif str(self.vision) in self.bad_db.keys():
@@ -374,7 +373,7 @@ def move_event(a,pos,b=0):
 
 letters = ['a','b','c','d','e','f','g','h']
 
-train = False
+train = True
 
 if train:
 
@@ -521,7 +520,7 @@ if train:
 
         blacks.database.update(whites.database)
 
-        with open('RL bot/bot_db.json','w') as db:
+        with open('RL_bot/bot_db.json','w') as db:
             json.dump(blacks.database,db)
 
         del Pieces.alives[:]
@@ -531,4 +530,4 @@ if train:
         del blacks_coords[:]
         del whites_coords[:]
 
-        #print(f'{turns} turns played')
+        print(f'{turns} turns played')
