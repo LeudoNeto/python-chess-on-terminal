@@ -374,157 +374,161 @@ def move_event(a,pos,b=0):
 
 letters = ['a','b','c','d','e','f','g','h']
 
-for matches in range(200):
-    wp1 = Pawn(0,1,'white')
-    wp2 = Pawn(1,1,'white')
-    wp3 = Pawn(2,1,'white')
-    wp4 = Pawn(3,1,'white')
-    wp5 = Pawn(4,1,'white')
-    wp6 = Pawn(5,1,'white')
-    wp7 = Pawn(6,1,'white')
-    wp8 = Pawn(7,1,'white')
-    bp1 = Pawn(0,6,'black')
-    bp2 = Pawn(1,6,'black')
-    bp3 = Pawn(2,6,'black')
-    bp4 = Pawn(3,6,'black')
-    bp5 = Pawn(4,6,'black')
-    bp6 = Pawn(5,6,'black')
-    bp7 = Pawn(6,6,'black')
-    bp8 = Pawn(7,6,'black')
-    wr1 = Rook(0,0,'white')
-    wr2 = Rook(7,0,'white')
-    br1 = Rook(0,7,'black')
-    br2 = Rook(7,7,'black')
-    wh1 = Horse(1,0,'white')
-    wh2 = Horse(6,0,'white')
-    bh1 = Horse(1,7,'black')
-    bh2 = Horse(6,7,'black')
-    wb1 = Bishop(2,0,'white')
-    wb2 = Bishop(5,0,'white')
-    bb1 = Bishop(2,7,'black')
-    bb2 = Bishop(5,7,'black')
-    wq = Queen(3,0,'white')
-    bq = Queen(4,7,'black')
-    wk = King(4,0,'white')
-    bk = King(3,7,'black')
+train = False
 
-    whites = RLbot('white')
-    blacks = RLbot('black')
+if train:
 
-    end = False
+    for matches in range(200):
+        wp1 = Pawn(0,1,'white')
+        wp2 = Pawn(1,1,'white')
+        wp3 = Pawn(2,1,'white')
+        wp4 = Pawn(3,1,'white')
+        wp5 = Pawn(4,1,'white')
+        wp6 = Pawn(5,1,'white')
+        wp7 = Pawn(6,1,'white')
+        wp8 = Pawn(7,1,'white')
+        bp1 = Pawn(0,6,'black')
+        bp2 = Pawn(1,6,'black')
+        bp3 = Pawn(2,6,'black')
+        bp4 = Pawn(3,6,'black')
+        bp5 = Pawn(4,6,'black')
+        bp6 = Pawn(5,6,'black')
+        bp7 = Pawn(6,6,'black')
+        bp8 = Pawn(7,6,'black')
+        wr1 = Rook(0,0,'white')
+        wr2 = Rook(7,0,'white')
+        br1 = Rook(0,7,'black')
+        br2 = Rook(7,7,'black')
+        wh1 = Horse(1,0,'white')
+        wh2 = Horse(6,0,'white')
+        bh1 = Horse(1,7,'black')
+        bh2 = Horse(6,7,'black')
+        wb1 = Bishop(2,0,'white')
+        wb2 = Bishop(5,0,'white')
+        bb1 = Bishop(2,7,'black')
+        bb2 = Bishop(5,7,'black')
+        wq = Queen(3,0,'white')
+        bq = Queen(4,7,'black')
+        wk = King(4,0,'white')
+        bk = King(3,7,'black')
 
-    turns = 0
-    while True:
-        turns += 1
-        #event("Whites' turn:")
-        pieces_coords = []
-        whites_coords = []
-        blacks_coords = []
-        for piece in Pieces.alives:
-            pieces_coords.append([piece.x,piece.y])
-        for white in Pieces.whites:
-            whites_coords.append([white.x,white.y])
-        for black in Pieces.blacks:
-            blacks_coords.append([black.x,black.y])
-        #board()
-        #event('Which piece do you want to move?')
-        #print('OBS: You can write the number on left, or the respective board position')
-        i = 0
-        for c,piece in enumerate(Pieces.whites):
-            #print(f'{f"[{c+1}] {type(piece).__name__}":<11} ({letters[piece.x]}{piece.y+1})      ',end='')
-            i += 1
-            if i == 4:
-                #print('')
-                i = 0
-        #print('')
-        bot_choice = whites.play()
-        choice = Pieces.whites[bot_choice]
-        #event(f'You choose {choice.color.capitalize()} {type(choice).__name__} ({letters[choice.x]}{choice.y+1})')
-        #board(choice)
-        #event(f'Where do you want to move {choice.color.capitalize()} {type(choice).__name__}?')
-        #print('OBS: You can write the number on left, or the respective board position')
-        i = 0
-        for c,pos in enumerate(choice.move_possibilites()):
-            #print(f'{f"[{c+1}] {letters[pos[0]]}{pos[1]+1}":<14}',end='')
-            i += 1
-            if i == 4:
-                #print('')
-                i = 0
-        #print('[0] BACK')
-        bot_poschoice = whites.move()
-        poschoice = choice.move_possibilites()[int(bot_poschoice)]
-        if poschoice in blacks_coords:
-            #move_event(choice,poschoice,Pieces.blacks[blacks_coords.index(poschoice)])
-            if type(Pieces.blacks[blacks_coords.index(poschoice)]) == King:
-                #event('Whites won the game.')
+        whites = RLbot('white')
+        blacks = RLbot('black')
+
+        end = False
+
+        turns = 0
+        while True:
+            turns += 1
+            #event("Whites' turn:")
+            pieces_coords = []
+            whites_coords = []
+            blacks_coords = []
+            for piece in Pieces.alives:
+                pieces_coords.append([piece.x,piece.y])
+            for white in Pieces.whites:
+                whites_coords.append([white.x,white.y])
+            for black in Pieces.blacks:
+                blacks_coords.append([black.x,black.y])
+            #board()
+            #event('Which piece do you want to move?')
+            #print('OBS: You can write the number on left, or the respective board position')
+            i = 0
+            for c,piece in enumerate(Pieces.whites):
+                #print(f'{f"[{c+1}] {type(piece).__name__}":<11} ({letters[piece.x]}{piece.y+1})      ',end='')
+                i += 1
+                if i == 4:
+                    #print('')
+                    i = 0
+            #print('')
+            bot_choice = whites.play()
+            choice = Pieces.whites[bot_choice]
+            #event(f'You choose {choice.color.capitalize()} {type(choice).__name__} ({letters[choice.x]}{choice.y+1})')
+            #board(choice)
+            #event(f'Where do you want to move {choice.color.capitalize()} {type(choice).__name__}?')
+            #print('OBS: You can write the number on left, or the respective board position')
+            i = 0
+            for c,pos in enumerate(choice.move_possibilites()):
+                #print(f'{f"[{c+1}] {letters[pos[0]]}{pos[1]+1}":<14}',end='')
+                i += 1
+                if i == 4:
+                    #print('')
+                    i = 0
+            #print('[0] BACK')
+            bot_poschoice = whites.move()
+            poschoice = choice.move_possibilites()[int(bot_poschoice)]
+            if poschoice in blacks_coords:
+                #move_event(choice,poschoice,Pieces.blacks[blacks_coords.index(poschoice)])
+                if type(Pieces.blacks[blacks_coords.index(poschoice)]) == King:
+                    #event('Whites won the game.')
+                    break
+                Pieces.blacks.pop(blacks_coords.index(poschoice))
+                Pieces.alives.pop(pieces_coords.index(poschoice))
+                [choice.x,choice.y] = poschoice
+            elif type(poschoice) == list:
+                #move_event(choice,poschoice)
+                [choice.x,choice.y] = poschoice
+            if turns > 1:
+                blacks.analyze()
+            #event("Blacks' turn:")
+            pieces_coords = []
+            whites_coords = []
+            blacks_coords = []
+            for piece in Pieces.alives:
+                pieces_coords.append([piece.x,piece.y])
+            for white in Pieces.whites:
+                whites_coords.append([white.x,white.y])
+            for black in Pieces.blacks:
+                blacks_coords.append([black.x,black.y])
+            #board()
+            #event('Which piece do you want to move?')
+            #print('OBS: You can write the number on left, or the respective board position')
+            i = 0
+            for c,piece in enumerate(Pieces.blacks):
+                #print(f'{f"[{c+1}] {type(piece).__name__}":<11} ({letters[piece.x]}{piece.y+1})      ',end='')
+                i += 1
+                if i == 4:
+                    #print('')
+                    i = 0
+            #print('')
+            bot_choice = blacks.play()
+            choice = Pieces.blacks[bot_choice]
+            #event(f'You choose {choice.color.capitalize()} {type(choice).__name__} ({letters[choice.x]}{choice.y+1})')
+            #board(choice)
+            #event(f'Where do you want to move {choice.color.capitalize()} {type(choice).__name__}?')
+            #print('OBS: You can write the number on left, or the respective board position')
+            i = 0
+            for c,pos in enumerate(choice.move_possibilites()):
+                #print(f'{f"[{c+1}] {letters[pos[0]]}{pos[1]+1}":<14}',end='')
+                i += 1
+                if i == 4:
+                    #print('')
+                    i = 0
+            #print('[0] BACK')
+            bot_poschoice = blacks.move()
+            poschoice = choice.move_possibilites()[int(bot_poschoice)]
+            if poschoice in whites_coords:
+                #move_event(choice,poschoice,Pieces.whites[whites_coords.index(poschoice)])
+                if type(Pieces.whites[whites_coords.index(poschoice)]) == King:
+                    #event('Blacks won the game.')
+                    end = True
+                Pieces.whites.pop(whites_coords.index(poschoice))
+                Pieces.alives.pop(pieces_coords.index(poschoice))
+                [choice.x,choice.y] = poschoice
+            whites.analyze()
+            if end:
                 break
-            Pieces.blacks.pop(blacks_coords.index(poschoice))
-            Pieces.alives.pop(pieces_coords.index(poschoice))
-            [choice.x,choice.y] = poschoice
-        elif type(poschoice) == list:
-            #move_event(choice,poschoice)
-            [choice.x,choice.y] = poschoice
-        if turns > 1:
-            blacks.analyze()
-        #event("Blacks' turn:")
-        pieces_coords = []
-        whites_coords = []
-        blacks_coords = []
-        for piece in Pieces.alives:
-            pieces_coords.append([piece.x,piece.y])
-        for white in Pieces.whites:
-            whites_coords.append([white.x,white.y])
-        for black in Pieces.blacks:
-            blacks_coords.append([black.x,black.y])
-        #board()
-        #event('Which piece do you want to move?')
-        #print('OBS: You can write the number on left, or the respective board position')
-        i = 0
-        for c,piece in enumerate(Pieces.blacks):
-            #print(f'{f"[{c+1}] {type(piece).__name__}":<11} ({letters[piece.x]}{piece.y+1})      ',end='')
-            i += 1
-            if i == 4:
-                #print('')
-                i = 0
-        #print('')
-        bot_choice = blacks.play()
-        choice = Pieces.blacks[bot_choice]
-        #event(f'You choose {choice.color.capitalize()} {type(choice).__name__} ({letters[choice.x]}{choice.y+1})')
-        #board(choice)
-        #event(f'Where do you want to move {choice.color.capitalize()} {type(choice).__name__}?')
-        #print('OBS: You can write the number on left, or the respective board position')
-        i = 0
-        for c,pos in enumerate(choice.move_possibilites()):
-            #print(f'{f"[{c+1}] {letters[pos[0]]}{pos[1]+1}":<14}',end='')
-            i += 1
-            if i == 4:
-                #print('')
-                i = 0
-        #print('[0] BACK')
-        bot_poschoice = blacks.move()
-        poschoice = choice.move_possibilites()[int(bot_poschoice)]
-        if poschoice in whites_coords:
-            #move_event(choice,poschoice,Pieces.whites[whites_coords.index(poschoice)])
-            if type(Pieces.whites[whites_coords.index(poschoice)]) == King:
-                #event('Blacks won the game.')
-                end = True
-            Pieces.whites.pop(whites_coords.index(poschoice))
-            Pieces.alives.pop(pieces_coords.index(poschoice))
-            [choice.x,choice.y] = poschoice
-        whites.analyze()
-        if end:
-            break
 
-    blacks.database.update(whites.database)
+        blacks.database.update(whites.database)
 
-    with open('RL bot/bot_db.json','w') as db:
-        json.dump(blacks.database,db)
+        with open('RL bot/bot_db.json','w') as db:
+            json.dump(blacks.database,db)
 
-    del Pieces.alives[:]
-    del Pieces.blacks[:]
-    del Pieces.whites[:]
-    del pieces_coords[:]
-    del blacks_coords[:]
-    del whites_coords[:]
+        del Pieces.alives[:]
+        del Pieces.blacks[:]
+        del Pieces.whites[:]
+        del pieces_coords[:]
+        del blacks_coords[:]
+        del whites_coords[:]
 
-    #print(f'{turns} turns played')
+        #print(f'{turns} turns played')

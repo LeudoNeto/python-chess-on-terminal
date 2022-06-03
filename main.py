@@ -1,3 +1,5 @@
+from RL_bot.rl import RLbot
+
 class Pieces:
     alives = []
     whites = []
