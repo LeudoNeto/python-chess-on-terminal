@@ -377,7 +377,7 @@ train = False
 
 if train:
 
-    for matches in range(200):
+    for match in range(1000):
         wp1 = Pawn(0,1,'white')
         wp2 = Pawn(1,1,'white')
         wp3 = Pawn(2,1,'white')
@@ -460,6 +460,7 @@ if train:
                 #move_event(choice,poschoice,Pieces.blacks[blacks_coords.index(poschoice)])
                 if type(Pieces.blacks[blacks_coords.index(poschoice)]) == King:
                     #event('Whites won the game.')
+                    blacks.analyze()
                     break
                 Pieces.blacks.pop(blacks_coords.index(poschoice))
                 Pieces.alives.pop(pieces_coords.index(poschoice))
@@ -530,4 +531,4 @@ if train:
         del blacks_coords[:]
         del whites_coords[:]
 
-        print(f'{turns} turns played')
+        print(f'{turns} turns played at match {match}')
