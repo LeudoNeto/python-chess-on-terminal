@@ -1,4 +1,118 @@
-from RL_bot.rl import RLbot
+from time import sleep
+from random import randint
+import json
+
+class RLbot:
+    def __init__(self, color):
+        self.color = color
+        with open('RL_bot/bot_db.json','r') as db:
+            self.database = json.load(db)
+            self.good_db = self.database['good']
+            self.bad_db = self.database['bad']
+
+    def play(self):
+        if self.color == 'white':
+            self.start_team = Pieces.whites[:]
+            self.start_enemy_team = Pieces.blacks[:]
+        else:
+            self.start_team = Pieces.blacks[:]
+            self.start_enemy_team = Pieces.whites[:]
+        pieces_initial_letter = ['K','Q','R','H','B','P']
+        self.vision = []
+        y_range = range(7,-1,-1)
+        if self.color == 'black':
+            y_range = reversed(y_range)
+        for y in y_range:
+            self.vision.append([])
+            for x in range(0,8):
+                if [x,y] in pieces_coords:
+                    piece_initial_letter = pieces_initial_letter[[King,Queen,Rook,Horse,Bishop,Pawn].index(type(Pieces.alives[pieces_coords.index([x,y])]))]
+                    if self.color == 'white':
+                        if Pieces.alives[pieces_coords.index([x,y])].color == 'white':
+                            piece_team = 'M'
+                        else:
+                            piece_team = 'E'
+                        self.vision[7-y].append(piece_team+piece_initial_letter)
+                    else:
+                        if Pieces.alives[pieces_coords.index([x,y])].color == 'white':
+                            piece_team = 'E'
+                        else:
+                            piece_team = 'M'
+                        self.vision[y].append(piece_team+piece_initial_letter)
+                else:
+                    if self.color == 'white':
+                        self.vision[7-y].append(0)
+                    else:
+                        self.vision[y].append(0)
+        if str(self.vision) in self.good_db.keys():
+            self.bot_move = self.good_db[str(self.vision)]
+            return self.bot_move[0]
+        elif str(self.vision) in self.bad_db.keys():
+            for i in range(50):
+                while True:
+                    try:
+                        if self.color == 'white':
+                            choice = randint(0,len(Pieces.whites)-1)
+                            self.bot_move = [choice,randint(0,len(Pieces.whites[choice].move_possibilites())-1)]
+                        else:
+                            choice = randint(0,len(Pieces.blacks)-1)
+                            self.bot_move = [choice,randint(0,len(Pieces.blacks[choice].move_possibilites())-1)]
+                        if self.bot_move not in self.bad_db.values():
+                            return self.bot_move[0]
+                    except ValueError:
+                        continue
+                    else:
+                        break
+        elif self.color == 'white':
+            while True:
+                try:
+                    choice = randint(0,len(Pieces.whites)-1)
+                    self.bot_move = [choice,randint(0,len(Pieces.whites[choice].move_possibilites())-1)]
+                except ValueError:
+                    continue
+                else:
+                    break
+        else:
+            while True:
+                try:
+                    choice = randint(0,len(Pieces.blacks)-1)
+                    self.bot_move = [choice,randint(0,len(Pieces.blacks[choice].move_possibilites())-1)]
+                except ValueError:
+                    continue
+                else:
+                    break
+        return self.bot_move[0]
+            
+    def move(self):
+        return self.bot_move[1]
+
+    def analyze(self):
+        if self.color == 'white':
+            self.final_team = Pieces.whites[:]
+            self.final_enemy_team = Pieces.blacks[:]
+        else:
+            self.final_team = Pieces.blacks[:]
+            self.final_enemy_team = Pieces.whites[:]
+        
+        priority = [King,Queen,Rook,Bishop,Horse,Pawn]
+
+        self.eated_piece = None
+        self.lost_piece = None
+
+        if len(self.final_team) < len(self.start_team):
+            self.lost_piece = list(set(self.start_team).difference(set(self.final_team)))[0]
+        if len(self.final_enemy_team) < len(self.start_enemy_team):
+            self.eated_piece = list(set(self.start_enemy_team).difference(set(self.final_enemy_team)))[0]
+        
+        if self.eated_piece and self.lost_piece:
+            if priority.index(type(self.eated_piece)) < priority.index(type(self.lost_piece)):
+                self.good_db[str(self.vision)] = self.bot_move
+            else:
+                self.bad_db[str(self.vision)] = self.bot_move
+        elif self.eated_piece:
+            self.good_db[str(self.vision)] = self.bot_move
+        elif self.lost_piece:
+            self.bad_db[str(self.vision)] = self.bot_move
 
 class Pieces:
     alives = []
@@ -286,13 +400,30 @@ wb1 = Bishop(2,0,'white')
 wb2 = Bishop(5,0,'white')
 bb1 = Bishop(2,7,'black')
 bb2 = Bishop(5,7,'black')
-wq = Queen(3,4,'white')
+wq = Queen(3,0,'white')
 bq = Queen(4,7,'black')
 wk = King(4,0,'white')
 bk = King(3,7,'black')
 
 letters = ['a','b','c','d','e','f','g','h']
 end = False
+
+event("Whites's player type:")
+print('[ 1 ] Real Player')
+print('[ 2 ] RL Bot')
+whites_type = input('Your choice: ')
+while whites_type not in ['1','2']:
+    whites_type = input('Invalid choice, please try again: ')
+event("Blacks's player type:")
+print('[ 1 ] Real Player')
+print('[ 2 ] RL Bot')
+blacks_type = input('Your choice: ')
+while blacks_type not in ['1','2']:
+    blacks_type = input('Invalid choice, please try again: ')
+if whites_type == '2':
+    whites = RLbot('white')
+if blacks_type == '2':
+    blacks = RLbot('black')
 
 while True:
     event("Whites' turn:")
@@ -316,7 +447,19 @@ while True:
             print('')
             i = 0
     print('')
-    choice = input('Your choice: ')
+    if whites_type == '1':
+        choice = input('Your choice: ')
+    elif whites_type == '2':
+        print('Bot is thinking',end='',flush=True)
+        sleep(0.5)
+        print('.',end='',flush=True)
+        sleep(0.5)
+        print('.',end='',flush=True)
+        sleep(0.5)
+        print('.')
+        sleep(0.5)
+        choice = whites.play() + 1
+        print(choice)
     while True:
         try:
             int(choice)
@@ -346,7 +489,19 @@ while True:
             print('')
             i = 0
     print('[0] BACK')
-    poschoice = input('Your choice: ')
+    if whites_type == '1':
+        poschoice = input('Your choice: ')
+    elif whites_type == '2':
+        print('Bot is thinking',end='',flush=True)
+        sleep(0.5)
+        print('.',end='',flush=True)
+        sleep(0.5)
+        print('.',end='',flush=True)
+        sleep(0.5)
+        print('.')
+        sleep(0.5)
+        poschoice = whites.move() + 1
+        print(poschoice)
     if poschoice == '0':
         continue
     else:
@@ -405,7 +560,19 @@ while True:
                         print('')
                         i = 0
                 print('')
-                choice = input('Your choice: ')
+                if blacks_type == '1':
+                    choice = input('Your choice: ')
+                elif blacks_type == '2':
+                    print('Bot is thinking',end='',flush=True)
+                    sleep(0.5)
+                    print('.',end='',flush=True)
+                    sleep(0.5)
+                    print('.',end='',flush=True)
+                    sleep(0.5)
+                    print('.')
+                    sleep(0.5)
+                    choice = blacks.play() + 1
+                    print(choice)
                 while True:
                     try:
                         int(choice)
@@ -435,7 +602,19 @@ while True:
                         print('')
                         i = 0
                 print('[0] BACK')
-                poschoice = input('Your choice: ')
+                if blacks_type == '1':
+                    poschoice = input('Your choice: ')
+                elif blacks_type == '2':
+                    print('Bot is thinking',end='',flush=True)
+                    sleep(0.5)
+                    print('.',end='',flush=True)
+                    sleep(0.5)
+                    print('.',end='',flush=True)
+                    sleep(0.5)
+                    print('.')
+                    sleep(0.5)
+                    poschoice = blacks.move() + 1
+                    print(poschoice)
                 if poschoice == '0':
                     continue
                 else:

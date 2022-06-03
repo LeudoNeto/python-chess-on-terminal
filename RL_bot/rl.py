@@ -373,7 +373,7 @@ def move_event(a,pos,b=0):
 
 letters = ['a','b','c','d','e','f','g','h']
 
-train = True
+train = False
 
 if train:
 
